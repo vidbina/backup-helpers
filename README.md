@@ -19,4 +19,5 @@ context:
  - `make backup` creates a backup, use the `SOURCE` variable to specify a
  non-`$HOME` directory to be archived such as demonstrated in
  `SOURCE=/directory/to/be/archived make backup`
- - `make nuke` destroys a backup tree. Use with caution! :boom:
+ - `make nuke` destroys a backup tree. Use with caution! :boom: (has been
+ commented to avoid accidental nukes :wink:)

@@ -36,6 +36,6 @@ dry-run:
 
 # Nukes a backup tree
 # NOTE: All backups and symlinks will be removed
-.PHONY: nuke
-nuke:
-	${RM} -rf .init .latest ${PREFIX}_*
+#.PHONY: nuke
+#nuke:
+#	${RM} -rf .init .latest ${PREFIX}_*
