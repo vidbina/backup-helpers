@@ -2,3 +2,4 @@
 .latest
 backup_*
 *.log
+backup.mk

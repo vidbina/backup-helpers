@@ -4,6 +4,8 @@ REALPATH=realpath
 RM=rm
 RSYNC=rsync
 
+-include backup.mk
+
 # Constants for the duration of this make run
 STAMP!=date +"%Y%m%d_%H%M%S"
 PREFIX=backup
