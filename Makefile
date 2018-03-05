@@ -43,7 +43,7 @@ RSYNC_ARGS=-aPh
 # --copy-unsafe-links     only "unsafe" symlinks are transformed
 # --safe-links            ignore symlinks that point outside the tree
 # --munge-links           munge symlinks to make them safer
-RSYNC_ARGS+=--copy-unsafe-links
+#RSYNC_ARGS+=--copy-unsafe-links
 # Copying unsafe links makes sense from the perspective of obtaining "complete
 # backups". Otherwise, we risk getting unusable artefacts. One example would be
 # the case in which a directory in the backup path symlinks to a file on a
