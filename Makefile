@@ -36,17 +36,32 @@ REF:=--link-dest=`${REALPATH} .latest`/
 #  -n perform a trial run with no changes made
 #  -v increase verbosity
 #  --stats prints a verbose set of statistics to provide extra insight into deltra-tranfer alg
+RSYNC_ARGS=-aPh
+
+# The following Rsync arguments provide more control in symlink handling:
+# --copy-links            transform symlink into referent file/dir
+# --copy-unsafe-links     only "unsafe" symlinks are transformed
+# --safe-links            ignore symlinks that point outside the tree
+# --munge-links           munge symlinks to make them safer
+RSYNC_ARGS+=--copy-unsafe-links
+# Copying unsafe links makes sense from the perspective of obtaining "complete
+# backups". Otherwise, we risk getting unusable artefacts. One example would be
+# the case in which a directory in the backup path symlinks to a file on a
+# mounted drive. This would be outside of the backup tree but if the backup is
+# to be complete, it should contain at least a copy of the files symlinked to
+# in order to grant the user the convenience of "full use" when referring to a
+# backup.
 
 # Initialize a backup tree in the current working directory by archiving the
 # SRC into DST.
-INIT_CMD=${RSYNC} -aPh ${SRC} ${DST}
+INIT_CMD=${RSYNC} ${RSYNC_ARGS} ${SRC} ${DST}
 
 # Backup SRC into DST while keeping REF as a reference for hardlinking.  REF is
 # generally the last backup. The the delta-transfer algorithm would basically
 # just need to compare the source (SRC) to the reference (REF) and hardlink
 # non-changed files into the destination (DST) while simultaneously copying
 # changed files into the destination (DST).
-BACKUP_CMD=${RSYNC} -aPh ${REF} ${SRC} ${DST}
+BACKUP_CMD=${RSYNC} ${RSYNC_ARGS} ${REF} ${SRC} ${DST}
 
 # Initializes the backup tree and saves the log of the operation along with
 # some statistics into a file.
