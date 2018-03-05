@@ -52,6 +52,14 @@ RSYNC_ARGS+=--copy-unsafe-links
 # in order to grant the user the convenience of "full use" when referring to a
 # backup.
 
+# --exclude-from=FILE     read exclude patterns from FILE
+# --exclude-from=FILE
+#        This option is related to the --exclude option, but it  specifies
+#        a  FILE  that  contains  exclude  patterns (one per line).  Blank
+#        lines in the file and lines starting with ’;’ or ’#’ are ignored.
+#        If FILE is -, the list will be read from standard input.
+RSYNC_ARGS+=--exclude-from=.ignore
+
 # Initialize a backup tree in the current working directory by archiving the
 # SRC into DST.
 INIT_CMD=${RSYNC} ${RSYNC_ARGS} ${SRC} ${DST}
