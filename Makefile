@@ -2,7 +2,7 @@
 LN=ln
 REALPATH=realpath
 RM=rm
-RSYNC=rsync
+RSYNC?=rsync
 
 -include backup.mk
 
