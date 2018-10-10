@@ -58,6 +58,7 @@ RSYNC_ARGS=-aPh
 #        a  FILE  that  contains  exclude  patterns (one per line).  Blank
 #        lines in the file and lines starting with ’;’ or ’#’ are ignored.
 #        If FILE is -, the list will be read from standard input.
+RSYNC_DEBUG_ARGS?=-vv
 RSYNC_ARGS+=--exclude-from=.ignore
 
 # Initialize a backup tree in the current working directory by archiving the
@@ -74,7 +75,7 @@ BACKUP_CMD=${RSYNC} ${RSYNC_ARGS} ${REF} ${SRC} ${DST}
 # Initializes the backup tree and saves the log of the operation along with
 # some statistics into a file.
 .init:
-	${INIT_CMD} -v --stats > ${PREFIX}_${STAMP}.log \
+	${INIT_CMD} ${RSYNC_DEBUG_ARGS} --stats > ${PREFIX}_${STAMP}.log \
 	&& ${RM} -f .init .latest \
 	&& ${LN} -s ${BACKUP_DIR} .init \
 	&& ${LN} -s ${BACKUP_DIR} .latest
@@ -82,20 +83,20 @@ BACKUP_CMD=${RSYNC} ${RSYNC_ARGS} ${REF} ${SRC} ${DST}
 # Dry-run of .init
 .PHONY: .init-test
 .init-test:
-	${INIT_CMD} -n -v --stats > ${PREFIX}_${STAMP}.dry.log
+	${INIT_CMD} ${RSYNC_DEBUG_ARGS} -n --stats > ${PREFIX}_${STAMP}.dry.log
 
 # Performs a backup and saves the log of the operation along with some
 # statistics into a file.
 .PHONY: backup
 backup:
-	${BACKUP_CMD} -v --stats > ${PREFIX}_${STAMP}.log \
+	${BACKUP_CMD} ${RSYNC_DEBUG_ARGS} --stats > ${PREFIX}_${STAMP}.log \
 	&& ${RM} .latest \
 	&& ${LN} -s ${BACKUP_DIR} .latest
 
 # Dry-run of backup
 .PHONY: backup-test
 backup-test:
-	${BACKUP_CMD} -n -v --stats > ${PREFIX}_${STAMP}.dry.log
+	${BACKUP_CMD} ${RSYNC_DEBUG_ARGS} -n --stats > ${PREFIX}_${STAMP}.dry.log
 
 # Nukes a backup tree
 # NOTE: All backups and symlinks will be removed
