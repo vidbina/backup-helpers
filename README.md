@@ -5,6 +5,17 @@ hard-linked instead of copied.
 
 ## Usage
 
+Produce a backup.mk file in the same directory where the
+Makefile is stored and specify the `SOURCE` variable therein.
+
+```Makefile
+# Example backup.mk
+SOURCE=/something/i/need/to/backup
+```
+
+Produce a `.ignore` file in the root directory which contains the directories
+within `SOURCE` to be ignored.
+
 All of the following commands use the current working directory as the working
 context:
 
@@ -29,14 +40,6 @@ which defaults to the user's `$HOME` directory when unspecified, in order to
 produce a backup. In case you need another directory backed-up please remember
 to specify the `SOURCE` as in `SOURCE=/to/be/archived make init` or
 `SOURCE=/to/be/archived make backup`.
-
-Conversely, one may produce a backup.mk file in the same directory where the
-Makefile is stored and specify the `SOURCE` variable therein.
-
-```Makefile
-# Example backup.mk
-SOURCE=/something/i/need/to/backup
-```
 
 > The benefit of using backup.mk is that one no longer needs to think about the
 source of the backup upon calling `make backup`. However; mind you that

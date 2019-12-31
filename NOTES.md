@@ -7,7 +7,7 @@ this issue because of some permission-related problems, however; I was able to
 list all the btrfs subvolumes at the path where my docker assets are stored. By
 default this path would be `/var/lib/docker` but on my setup this is different
 (my docker-related assets are on a `/mnt/store` btrfs volume) so bear with me
- 
+
 ```
 # list btrfs subvolumes as a table (-T)
 btrfs subvolumes list /mnt/store -T
@@ -52,7 +52,7 @@ Sending using
 btrfs send current
 ```
 
-will send the snapshot, `current`, in its entirity to stdout, whereas 
+will send the snapshot, `current`, in its entirity to stdout, whereas
 
 ```
 btrfs send -i previous current
@@ -107,6 +107,41 @@ The correct command for sending data from `/mnt/store` to `/mnt/backup` is
 btrfs send /mnt/store/snapshot_x | btrfs receive /mnt/backup
 ```
 
+## Balancing
+
+After removing subvolumes it may appear that the output of `df -H`
+a
+
+`btrfs fi show`
+
+The output of `btrfs fi show /mnt/store` should provide some insights as to how
+much space there is actually available on the btrfs partition.
+
+```
+sudo btrfs balance start -m -v /mnt/store
+```
+
+```
+vid@bina> sudo btrfs fi show                                                                                            ~
+Label: 'base'  uuid: 1623a3d9-cf4c-40d4-94a5-78b166a73982
+	Total devices 1 FS bytes used 55.42GiB
+	devid    1 size 100.00GiB used 100.00GiB path /dev/mapper/vg-root
+
+Label: none  uuid: c564c85b-918a-4349-8960-083b86af34a2
+	Total devices 1 FS bytes used 255.05GiB
+	devid    1 size 300.00GiB used 300.00GiB path /dev/mapper/store-store
+
+Label: 'vault'  uuid: ab4608b5-fa82-4136-b9cf-e11116bda80f
+	Total devices 1 FS bytes used 271.73GiB
+	devid    1 size 518.51GiB used 274.02GiB path /dev/nvme0n1p6
+
+vid@bina> sudo btrfs fi df /store                                                                                       ~
+Data, single: total=296.95GiB, used=253.13GiB
+System, single: total=32.00MiB, used=48.00KiB
+Metadata, single: total=3.01GiB, used=1.92GiB
+GlobalReserve, single: total=422.14MiB, used=0.00B
+```
+
 ## Links
 
  - https://lwn.net/Articles/579009/
@@ -116,3 +151,5 @@ btrfs send /mnt/store/snapshot_x | btrfs receive /mnt/backup
  - https://lwn.net/Articles/506244/
  - https://ramsdenj.com/2016/04/05/using-btrfs-for-easy-backup-and-rollback.html
  - https://unix.stackexchange.com/questions/149932/how-to-make-a-btrfs-snapshot-writable
+ - http://marc.merlins.org/perso/btrfs/post_2014-05-04_Fixing-Btrfs-Filesystem-Full-Problems.html
+ - https://btrfs.wiki.kernel.org/index.php/Balance_Filters#Balancing_to_fix_filesystem_full_errors
