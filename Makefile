@@ -1,22 +1,22 @@
 # Used commands
-LN=ln
-REALPATH=realpath
-RM=rm
-RSYNC?=rsync
+LN = ln
+REALPATH = realpath
+RM = rm
+RSYNC ?= rsync
 
 -include backup.mk
 
 # Constants for the duration of this make run
-STAMP!=date +"%Y%m%d_%H%M%S"
-PREFIX=backup
-BACKUP_DIR:=${PREFIX}_${STAMP}
+STAMP != date +"%Y%m%d_%H%M%S"
+PREFIX = backup
+BACKUP_DIR := ${PREFIX}_${STAMP}
 
 # SOURCE defaults to the home directory
-SOURCE?=~
+SOURCE ?=~
 # Expansions, not lazy-loaded
-SRC:=`${REALPATH} ${SOURCE}`/
-DST:=`${REALPATH} ${BACKUP_DIR}`/
-REF:=--link-dest=`${REALPATH} .latest`/
+SRC := `${REALPATH} ${SOURCE}`/
+DST := `${REALPATH} ${BACKUP_DIR}`/
+REF := --link-dest=`${REALPATH} .latest`/
 
 # The following Rsync arguments are used:
 #  -a archive mode; equals -rlptgoD
@@ -36,7 +36,7 @@ REF:=--link-dest=`${REALPATH} .latest`/
 #  -n perform a trial run with no changes made
 #  -v increase verbosity
 #  --stats prints a verbose set of statistics to provide extra insight into deltra-tranfer alg
-RSYNC_ARGS=-aPh
+RSYNC_ARGS = -aPh
 
 # The following Rsync arguments provide more control in symlink handling:
 # --copy-links            transform symlink into referent file/dir
@@ -58,19 +58,19 @@ RSYNC_ARGS=-aPh
 #        a  FILE  that  contains  exclude  patterns (one per line).  Blank
 #        lines in the file and lines starting with ’;’ or ’#’ are ignored.
 #        If FILE is -, the list will be read from standard input.
-RSYNC_DEBUG_ARGS?=-vv
-RSYNC_ARGS+=--exclude-from=.ignore
+RSYNC_DEBUG_ARGS ?= -vv
+RSYNC_ARGS += --exclude-from=.ignore
 
 # Initialize a backup tree in the current working directory by archiving the
 # SRC into DST.
-INIT_CMD=${RSYNC} ${RSYNC_ARGS} ${SRC} ${DST}
+INIT_CMD = ${RSYNC} ${RSYNC_ARGS} ${SRC} ${DST}
 
 # Backup SRC into DST while keeping REF as a reference for hardlinking.  REF is
 # generally the last backup. The the delta-transfer algorithm would basically
 # just need to compare the source (SRC) to the reference (REF) and hardlink
 # non-changed files into the destination (DST) while simultaneously copying
 # changed files into the destination (DST).
-BACKUP_CMD=${RSYNC} ${RSYNC_ARGS} ${REF} ${SRC} ${DST}
+BACKUP_CMD = ${RSYNC} ${RSYNC_ARGS} ${REF} ${SRC} ${DST}
 
 # Initializes the backup tree and saves the log of the operation along with
 # some statistics into a file.
