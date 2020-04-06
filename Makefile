@@ -12,7 +12,7 @@ PREFIX = backup
 BACKUP_DIR := ${PREFIX}_${STAMP}
 
 # SOURCE defaults to the home directory
-SOURCE ?=~
+SOURCE ?= ~
 # Expansions, not lazy-loaded
 SRC := `${REALPATH} ${SOURCE}`/
 DST := `${REALPATH} ${BACKUP_DIR}`/
